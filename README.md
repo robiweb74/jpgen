@@ -10,7 +10,7 @@ A text editor (optional)
 Installing
 Clone or download the repository to your local machine.
 Copy code
-git clone https://github.com/<username>/jpgen.git
+git clone https://github.com/robiweb74/jpgen.git
 Open the index.html file in your web browser.
 
 Click on the "Generate Numbers" button to generate and display the numbers.
