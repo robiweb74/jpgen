@@ -26,9 +26,16 @@ button {
     border: none;
     cursor: pointer;
 }
+
+html {
+    height: -webkit-fill-available;
+}
+
 /* Media query for small screens */
 @media (max-width: 768px) {
     body {
         font-size: 14px;
+        height: 100vh;
+        height: -webkit-fill-available;
     }
 }
