@@ -8,6 +8,8 @@ function generateNumbers() {
         }
     }
 
+    nums1.sort(function(a, b) { return a - b });
+
     var nums2 = [];
     while (nums2.length < 2) {
         var num = Math.floor(Math.random() * 12) + 1;
@@ -15,6 +17,8 @@ function generateNumbers() {
             nums2.push(num);
         }
     }
+
+    nums2.sort(function(a, b) { return a - b });
 
     // display the numbers on the page
     document.getElementById("nums1").innerHTML = "Pet številk: " + nums1.join(", ");
