@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euro Jackpot Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-gradient: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.5);
+            --euro-red: #ef4444;
+            --euro-glow: rgba(239, 68, 68, 0.5);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background elements */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .blob-1 { top: -50px; left: -50px; width: 200px; height: 200px; background: var(--gold); }
+        .blob-2 { bottom: -50px; right: -50px; width: 200px; height: 200px; background: var(--euro-red); }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .results-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            min-height: 180px; /* Reserve space */
+            justify-content: center;
+        }
+
+        .number-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ball {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: scale(0.5);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .ball.main {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 2px solid #fbbf24;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .ball.euro {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            border: 2px solid #fca5a5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        button {
+            background: linear-gradient(to right, var(--gold), #f59e0b);
+            color: #0f172a;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px var(--gold-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px var(--gold-glow);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ball {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <h1>Euro Jackpot</h1>
+        <p class="subtitle">Generate your lucky numbers</p>
+
+        <div class="results-area" id="results">
+            <!-- Numbers will appear here -->
+            <div style="color: var(--text-muted); font-style: italic; opacity: 0.5;">
+                Click generate to start
+            </div>
+        </div>
+
+        <button id="generateBtn">Generate Numbers</button>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const resultsDiv = document.getElementById('results');
+
+        function getRandomNumbers(count, max) {
+            const numbers = new Set();
+            while(numbers.size < count) {
+                numbers.add(Math.floor(Math.random() * max) + 1);
+            }
+            return Array.from(numbers).sort((a, b) => a - b);
+        }
+
+        function createBall(number, type, delay) {
+            const ball = document.createElement('div');
+            ball.className = `ball ${type}`;
+            ball.textContent = number;
+            ball.style.animationDelay = `${delay}ms`;
+            return ball;
+        }
+
+        function generate() {
+            // Clear previous results
+            resultsDiv.innerHTML = '';
+
+            // Generate numbers
+            const mainNumbers = getRandomNumbers(5, 50);
+            const euroNumbers = getRandomNumbers(2, 12);
+
+            // Create containers
+            const mainGroup = document.createElement('div');
+            mainGroup.className = 'number-group';
+            
+            const euroGroup = document.createElement('div');
+            euroGroup.className = 'number-group';
+
+            // Add labels (optional, but good for structure)
+            const mainLabel = document.createElement('div');
+            
+            // Append balls with staggered animation
+            let delay = 0;
+            
+            mainNumbers.forEach(num => {
+                mainGroup.appendChild(createBall(num, 'main', delay));
+                delay += 100;
+            });
+
+            euroNumbers.forEach(num => {
+                euroGroup.appendChild(createBall(num, 'euro', delay));
+                delay += 100;
+            });
+
+            // Assemble
+            const mainSection = document.createElement('div');
+            mainSection.innerHTML = '<span class="label">Main Numbers (1-50)</span>';
+            mainSection.appendChild(mainGroup);
+
+            const euroSection = document.createElement('div');
+            euroSection.innerHTML = '<span class="label">Euro Numbers (1-12)</span>';
+            euroSection.appendChild(euroGroup);
+
+            resultsDiv.appendChild(mainSection);
+            resultsDiv.appendChild(euroSection);
+        }
+
+        generateBtn.addEventListener('click', generate);
+        
+        // Optional: Generate on load? No, let user click.
+    </script>
+</body>
+</html>
